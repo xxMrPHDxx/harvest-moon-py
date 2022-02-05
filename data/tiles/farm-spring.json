@@ -1,0 +1,7 @@
+{
+  "name": "farm-spring",
+  "rows": 64,
+  "cols": 64,
+  "tileset": "tiles/farm-spring.png",
+  "map": "tiles/farm-spring.map"
+}

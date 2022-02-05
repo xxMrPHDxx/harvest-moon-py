@@ -1,0 +1,40 @@
+{
+	"image": "./data/images/jack.png",
+	"frames": {
+		"idle-down": [46, 122, 16, 24],
+		"idle-left": [47, 147, 16, 24],
+		"idle-up": [48, 172, 16, 24],
+		"walk-down-1": [29, 122, 16, 24],
+		"walk-down-2": [63, 122, 16, 24],
+		"walk-left-1": [30, 147, 16, 24],
+		"walk-left-2": [64, 147, 16, 24],
+		"walk-up-1": [31, 172, 16, 24],
+		"walk-up-2": [65, 172, 16, 24]
+	},
+	"animations": {
+		"idle-down": {
+			"speed": 0,
+			"frames": ["idle-down"]
+		},
+		"idle-left": {
+			"speed": 0,
+			"frames": ["idle-left"]
+		},
+		"idle-up": {
+			"speed": 0,
+			"frames": ["idle-up"]
+		},
+		"walk-down": {
+			"speed": 0.15,
+			"frames": ["walk-down-1","idle-down","walk-down-2","idle-down"]
+		},
+		"walk-left": {
+			"speed": 0.15,
+			"frames": ["walk-left-1","idle-left","walk-left-2","idle-left"]
+		},
+		"walk-up": {
+			"speed": 0.15,
+			"frames": ["walk-up-1","idle-up","walk-up-2","idle-up"]
+		}
+	}
+}
