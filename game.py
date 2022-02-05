@@ -94,5 +94,5 @@ class Game:
 			fps_clock.tick(self.__fps)
 
 if __name__ == '__main__':
-	game = Game()
+	game = Game(title='Harvest Moon')
 	game.start()

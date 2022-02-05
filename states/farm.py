@@ -8,4 +8,4 @@ class Farm(_State):
 	def update(self, dt):
 		pass
 	def draw(self, game):
-		game.assets.get_map('farm-winter').draw(game.screen)
+		game.assets.get_map('farm-spring').draw(game.screen)
