@@ -1,0 +1,6 @@
+{
+  "name": "ending_potato",
+  "rows": 14,
+  "cols": 16,
+  "map": "./data/tiles/ending_potato.map"
+}

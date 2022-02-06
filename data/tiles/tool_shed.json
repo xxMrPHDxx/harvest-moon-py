@@ -1,0 +1,6 @@
+{
+  "name": "tool_shed",
+  "rows": 13,
+  "cols": 12,
+  "map": "./data/tiles/tool_shed.map"
+}

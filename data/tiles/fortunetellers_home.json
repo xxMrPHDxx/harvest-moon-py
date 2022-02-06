@@ -1,0 +1,6 @@
+{
+  "name": "fortunetellers_home",
+  "rows": 12,
+  "cols": 13,
+  "map": "./data/tiles/fortunetellers_home.map"
+}

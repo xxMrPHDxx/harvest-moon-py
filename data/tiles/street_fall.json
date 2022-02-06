@@ -1,0 +1,6 @@
+{
+  "name": "street_fall",
+  "rows": 16,
+  "cols": 16,
+  "map": "./data/tiles/street_fall.map"
+}

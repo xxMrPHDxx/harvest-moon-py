@@ -1,0 +1,6 @@
+{
+  "name": "village_egg_festival",
+  "rows": 64,
+  "cols": 48,
+  "map": "./data/tiles/village_egg_festival.map"
+}

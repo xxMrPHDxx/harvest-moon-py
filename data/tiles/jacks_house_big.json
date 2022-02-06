@@ -1,0 +1,6 @@
+{
+  "name": "jacks_house_big",
+  "rows": 14,
+  "cols": 26,
+  "map": "./data/tiles/jacks_house_big.map"
+}

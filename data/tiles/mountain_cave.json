@@ -1,0 +1,6 @@
+{
+  "name": "mountain_cave",
+  "rows": 32,
+  "cols": 32,
+  "map": "./data/tiles/mountain_cave.map"
+}

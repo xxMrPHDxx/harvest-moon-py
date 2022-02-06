@@ -1,0 +1,6 @@
+{
+  "name": "farms_cave",
+  "rows": 48,
+  "cols": 16,
+  "map": "./data/tiles/farms_cave.map"
+}

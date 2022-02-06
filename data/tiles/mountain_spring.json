@@ -1,0 +1,6 @@
+{
+  "name": "mountain_spring",
+  "rows": 48,
+  "cols": 48,
+  "map": "./data/tiles/mountain_spring.map"
+}

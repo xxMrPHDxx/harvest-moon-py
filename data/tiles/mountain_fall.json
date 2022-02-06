@@ -1,0 +1,6 @@
+{
+  "name": "mountain_fall",
+  "rows": 48,
+  "cols": 48,
+  "map": "./data/tiles/mountain_fall.map"
+}

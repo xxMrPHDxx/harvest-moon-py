@@ -1,0 +1,6 @@
+{
+  "name": "mountain_top_winter",
+  "rows": 48,
+  "cols": 16,
+  "map": "./data/tiles/mountain_top_winter.map"
+}

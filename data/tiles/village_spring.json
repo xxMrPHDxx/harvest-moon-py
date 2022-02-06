@@ -1,0 +1,6 @@
+{
+  "name": "village_spring",
+  "rows": 64,
+  "cols": 48,
+  "map": "./data/tiles/village_spring.map"
+}

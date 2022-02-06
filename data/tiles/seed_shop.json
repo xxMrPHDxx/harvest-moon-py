@@ -1,0 +1,6 @@
+{
+  "name": "seed_shop",
+  "rows": 13,
+  "cols": 16,
+  "map": "./data/tiles/seed_shop.map"
+}

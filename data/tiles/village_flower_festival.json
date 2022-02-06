@@ -1,0 +1,6 @@
+{
+  "name": "village_flower_festival",
+  "rows": 32,
+  "cols": 32,
+  "map": "./data/tiles/village_flower_festival.map"
+}
