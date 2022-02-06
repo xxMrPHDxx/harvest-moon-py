@@ -1,6 +1,0 @@
-{
-  "name": "chicken_coop",
-  "rows": 13,
-  "cols": 16,
-  "map": "./data/tiles/chicken_coop.map"
-}

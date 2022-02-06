@@ -1,5 +1,5 @@
 {
-	"image": "./data/images/jack.png",
+	"image": "./data/raw/sheets/jack.png",
 	"frames": {
 		"idle-down": [46, 122, 16, 24],
 		"idle-left": [47, 147, 16, 24],

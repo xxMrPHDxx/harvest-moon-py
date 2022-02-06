@@ -1,6 +1,0 @@
-{
-  "name": "ninas_room",
-  "rows": 12,
-  "cols": 16,
-  "map": "./data/tiles/ninas_room.map"
-}

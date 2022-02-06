@@ -18,17 +18,19 @@ TILESIZE = 16
 
 def download_sheet(url):
   soup = BeautifulSoup(urlopen(url).read(), 'html.parser')
-  name = re.sub(r'[^A-Za-z_]', '', soup.select_one('#game-info-wrapper div').text.replace(' ', '_').lower())
+  name = re.sub(
+    r'[^A-Za-z_0-9]', '', 
+    soup.select_one('#game-info-wrapper div').text.replace(' ', '_').replace('/', '_of_').lower()
+  )
   download_url = soup.select_one('#game-info-wrapper tr.rowfooter a')['href']
   folder = './data/raw/sheets'
   path = f'{folder}/{name}.png'
-  if not os.path.exists(folder): os.makedirs(folder)
   if os.path.exists(path): 
-    print(f'File "{path}" already exists! Overwriting...')
+    print(f'[WARNING]: File "{path}" already exists! Overwriting...')
   content = urlopen(f'https://www.spriters-resource.com{download_url}').read()
   with open(path, 'wb') as file:
     file.write(content)
-  print(f'Downloaded "{path}" successfully!')
+  print(f'[INFO]: Downloaded "{path}" successfully!')
 
 def download_sheets():
   pool = Pool(TOTAL_WORKER)
@@ -38,6 +40,10 @@ def download_sheets():
     for link in soup.find_all('a')
     if 'href' in link.attrs and re.match(r'^\/snes\/harvestmoon\/sheet/.*$', link['href'])
   ]
+
+  print(f'[INFO]: Downloading {len(sheet_urls)} spritesheets...')
+  folder = './data/raw/sheets'
+  if not os.path.exists(folder): os.makedirs(folder)
   pool.map(download_sheet, sheet_urls)
 
 def get_surfaces(path):
@@ -45,7 +51,6 @@ def get_surfaces(path):
   w, h = image.get_size()
   outdir, results, MAP = './data/raw/tiles', [], {}
   name, i = path.split('/')[-1].split('.')[0], 1
-  if not os.path.exists(outdir): os.makedirs(outdir)
   for y in range(0, h, TILESIZE):
     rows = []
     for x in range(0, w, TILESIZE):
@@ -79,9 +84,12 @@ def create_tilesheets():
   ]
 
   print(f'[INFO]: Getting all the tiles and splitting them')
+  outdir = './data/raw/tiles'
+  if not os.path.exists(outdir): os.makedirs(outdir)
   maps = pool.map_async(get_surfaces, tilesheets).get()
   
-  print(f'[INFO]: Re-calculating indices for all the tiles. This should takes a while so grab a coffee...')
+  print('[INFO]: Re-calculating indices for all the tiles. This', end=' ')
+  print('should takes a while so grab a coffee...')
   hashes = []
   surfaces = {}
   for _map in maps:
@@ -102,16 +110,16 @@ def create_tilesheets():
 
   # Creating the massive tile sheet
   print(f'[INFO]: Creating a massive tile sheet with dimension ({rows}, {cols})...')
-  # fullsheet = pygame.Surface((cols*TILESIZE, rows*TILESIZE))
-  # i = 0
-  # for row in range(rows):
-  #   for col in range(cols):
-  #     _hash = hashes[i]
-  #     surface = surfaces[_hash]
-  #     dest = col * TILESIZE, row * TILESIZE
-  #     fullsheet.blit(surface, dest=dest)
-  #     i += 1
-  # pygame.image.save(fullsheet, './data/tiles/sheet.png')
+  fullsheet = pygame.Surface((cols*TILESIZE, rows*TILESIZE))
+  i = 0
+  for row in range(rows):
+    for col in range(cols):
+      _hash = hashes[i]
+      surface = surfaces[_hash]
+      dest = col * TILESIZE, row * TILESIZE
+      fullsheet.blit(surface, dest=dest)
+      i += 1
+  pygame.image.save(fullsheet, './data/tiles/sheet.png')
 
   print('[INFO]: Creating map (.map) and config (.json) files for each map...')
   for _map in maps:
@@ -132,6 +140,18 @@ def create_tilesheets():
   
   print('[INFO]: Finished! Total tiles:', len(hashes))
 
+def separator():
+  print('=' * 60)
+
 if __name__ == '__main__':
+  separator()
+  print('[INFO]: Downloading relevant spritesheets...')
   download_sheets()
+
+  separator()
+  print('[INFO]: Creating tilesheets from all of the maps...')
   create_tilesheets()
+
+  separator()
+  print('[INFO]: Cleaning raw data as they are no longer needed...')
+  os.remove('./data/raw')

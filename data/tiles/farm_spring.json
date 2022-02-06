@@ -1,6 +1,0 @@
-{
-  "name": "farm_spring",
-  "rows": 64,
-  "cols": 64,
-  "map": "./data/tiles/farm_spring.map"
-}

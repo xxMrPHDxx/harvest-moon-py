@@ -1,7 +1,0 @@
-{
-  "name": "farm-summer",
-  "rows": 64,
-  "cols": 64,
-  "tileset": "tiles/farm-summer.png",
-  "map": "tiles/farm-summer.map"
-}

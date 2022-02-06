@@ -1,6 +1,0 @@
-{
-  "name": "farm_fall",
-  "rows": 64,
-  "cols": 64,
-  "map": "./data/tiles/farm_fall.map"
-}

@@ -1,6 +1,0 @@
-{
-  "name": "tool_shop",
-  "rows": 25,
-  "cols": 16,
-  "map": "./data/tiles/tool_shop.map"
-}
