@@ -1,5 +1,4 @@
 from os import walk
-from os.path import join
 import pygame
 import json
 
@@ -111,17 +110,16 @@ class AssetManager():
 					del animation
 					continue
 				self.__animations[name] = animation
-	def __load_map(self, path):
+	def __load_map(self, tilesheet, path):
 		with open(path) as file:
 			config = json.load(file)
-		for prop in ['name', 'rows', 'cols', 'tileset', 'map']:
+		for prop in ['name', 'rows', 'cols', 'map']:
 			if prop not in config:
 				raise Exception(f'Error: "{prop}" does not exist in tileset config!')
 		rows, cols = config['rows'], config['cols']
 		*paths, name = path.split('/')
 		paths = '/'.join(paths)
 		name = name.split('.')[0]
-		tiles = pygame.image.load(open(f'{paths}/{name}.png'))
 
 		solids = []
 		if 'solid' in config:
@@ -131,19 +129,19 @@ class AssetManager():
 					solids = [*solids, *range(*item, 1)]
 
 		tileset = TileSet()
-		w, h = tiles.get_size()
+		w, h = tilesheet.get_size()
 		tile_id = 0
 		for y in range(0, h, 16):
 			for x in range(0, w, 16):
 				surface = pygame.Surface((16, 16))
-				surface.blit(tiles, dest=(0, 0), area=(x, y, 16, 16))
+				surface.blit(tilesheet, dest=(0, 0), area=(x, y, 16, 16))
 				tile = Tile(surface, tile_id in solids)
 				tileset.add_tile(tile)
 				tile_id += 1
 
+		ncols = w // 16
 		w, h = cols * 16, rows * 16
 		MAP = []
-		ncols = tiles.get_size()[0] // 16
 		with open(f'{paths}/{name}.map', 'rb') as f:
 			for row in range(rows):
 				columns = []
@@ -151,24 +149,23 @@ class AssetManager():
 				for col in range(cols):
 					x = col * 16
 					tile = int.from_bytes(f.read(2), 'big')
-					sx = (tile % ncols) * 16
-					sy = (tile // ncols) * 16
 					columns.append(tile)
 				MAP.append(columns)
 
 		self.__maps[config['name']] = TileMap(tileset, MAP)
 	def load_spritesheets(self, path):
-		for a, b, files in walk(path):
+		for _, __, files in walk(path):
 			for file in files:
 				name = file.split('.')[0]
 				with open(f'{path}/{file}') as file:
 					self.__load_spritesheet(json.load(file))
 	def load_maps(self, path):
+		tilesheet = pygame.image.load('./data/tiles/sheet.png')
 		for _, __, files in walk(path):
 			for file in files:
 				if file[-5:] != '.json': continue
 				name = file.split('.')[0]
-				self.__load_map(f'{path}/{file}')
+				self.__load_map(tilesheet, f'{path}/{file}')
 
 if __name__ == '__main__':
 	m = AssetManager()
@@ -176,7 +173,7 @@ if __name__ == '__main__':
 	m.load_maps('./data/tiles')
 	
 	pygame.init()
-	_map = m.get_map('farm-winter')
+	_map = m.get_map('farm_winter')
 	_map.draw(pygame.display.set_mode((1024, 1024)))
 	pygame.display.update()
 

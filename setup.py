@@ -26,7 +26,8 @@ def download_sheet(url):
   folder = './data/raw/sheets'
   path = f'{folder}/{name}.png'
   if os.path.exists(path): 
-    print(f'[WARNING]: File "{path}" already exists! Overwriting...')
+    print(f'[WARNING]: File "{path}" already exists! Skipping...')
+    return
   content = urlopen(f'https://www.spriters-resource.com{download_url}').read()
   with open(path, 'wb') as file:
     file.write(content)
@@ -34,7 +35,10 @@ def download_sheet(url):
 
 def download_sheets():
   pool = Pool(TOTAL_WORKER)
-  soup = BeautifulSoup(urlopen('https://www.spriters-resource.com/snes/harvestmoon/').read(), 'html.parser')
+  soup = BeautifulSoup(
+    urlopen('https://www.spriters-resource.com/snes/harvestmoon/').read(), 
+    'html.parser'
+  )
   sheet_urls = [
     f"https://www.spriters-resource.com{link['href']}"
     for link in soup.find_all('a')
@@ -64,19 +68,24 @@ def get_surfaces(path):
     results.append(rows)
   MAP['name'], MAP['map'] = name, results
   MAP['rows'], MAP['cols'] = h // TILESIZE, w // TILESIZE
-  print(f'[INFO]: Done processing {path}!')
+  print(f'[INFO]: Done processing "{path}"!')
   return MAP
 
 def create_tilesheets():
   pool = Pool(TOTAL_WORKER)
   SHEETS = [
-    'animal_shop', 'carpenters_home', 'chicken_coop', 'church', 'cow_barn', 'ending_corn', 'ending_ellen', 'ending_nina',
-    'ending_potato', 'ending_tomato', 'ending_turnip', 'farm_fall', 'farms_cave', 'farm_spring', 'farm_summer', 'farm_winter',
-    'fortunetellers_home', 'golden_chickens_palace', 'jacks_house_big', 'jacks_house_medium', 'jacks_house_small', 'mayors_home', 'mountain_cave', 'mountain_fall',
-    'mountain_spring', 'mountain_star_night_festival', 'mountain_summer', 'mountain_top_beanstalk', 'mountain_top_fall', 'mountain_top_spring', 'mountain_top_star_night_festival', 'mountain_top_summer',
-    'mountain_top_winter', 'mountain_winter', 'ninas_room', 'opening_cutscene_', 'restaurant', 'saloon', 'seed_shop', 'street_fall',
-    'street_spring', 'street_summer', 'street_winter', 'summer_clouds', 'tool_shed', 'tool_shop', 'village_egg_festival', 'village_fall',
-    'village_flower_festival', 'village_harvest_festival', 'village_spring', 'village_star_night_festival', 'village_summer', 'village_winter'
+    'animal_shop', 'carpenters_home', 'chicken_coop', 'church', 'cow_barn', 'ending_corn', 
+    'ending_ellen', 'ending_nina', 'ending_potato', 'ending_tomato', 'ending_turnip', 'farm_fall', 
+    'farms_cave', 'farm_spring', 'farm_summer', 'farm_winter', 'fortunetellers_home', 
+    'golden_chickens_palace', 'jacks_house_big', 'jacks_house_medium', 'jacks_house_small', 
+    'mayors_home', 'mountain_cave', 'mountain_fall', 'mountain_spring', 'mountain_star_night_festival', 
+    'mountain_summer', 'mountain_top_beanstalk', 'mountain_top_fall', 'mountain_top_spring', 
+    'mountain_top_star_night_festival', 'mountain_top_summer', 'mountain_top_winter', 
+    'mountain_winter', 'ninas_room', 'opening_cutscene_1_of_2', 'opening_cutscene_2_of_2', 
+    'restaurant', 'saloon', 'seed_shop', 'street_fall', 'street_spring', 'street_summer', 
+    'street_winter', 'summer_clouds', 'tool_shed', 'tool_shop', 'village_egg_festival', 'village_fall',
+    'village_flower_festival', 'village_harvest_festival', 'village_spring', 
+    'village_star_night_festival', 'village_summer', 'village_winter'
   ]
   tilesheets = [
     f'./data/raw/sheets/{name}.png'
@@ -89,7 +98,7 @@ def create_tilesheets():
   maps = pool.map_async(get_surfaces, tilesheets).get()
   
   print('[INFO]: Re-calculating indices for all the tiles. This', end=' ')
-  print('should takes a while so grab a coffee...')
+  print('should takes a while so go grab a coffee...')
   hashes = []
   surfaces = {}
   for _map in maps:
@@ -119,7 +128,9 @@ def create_tilesheets():
       dest = col * TILESIZE, row * TILESIZE
       fullsheet.blit(surface, dest=dest)
       i += 1
-  pygame.image.save(fullsheet, './data/tiles/sheet.png')
+  folder = './data/tiles'
+  if not os.path.exists(folder): os.makedirs(folder)
+  pygame.image.save(fullsheet, f'{folder}/sheet.png')
 
   print('[INFO]: Creating map (.map) and config (.json) files for each map...')
   for _map in maps:
@@ -153,5 +164,5 @@ if __name__ == '__main__':
   create_tilesheets()
 
   separator()
-  print('[INFO]: Cleaning raw data as they are no longer needed...')
-  os.remove('./data/raw')
+  print('[INFO]: Cleaning raw tiles folder (./data/raw/tiles/) as they are no longer needed...')
+  os.rmdir('./data/raw/tiles')
